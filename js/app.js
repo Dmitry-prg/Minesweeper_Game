@@ -522,6 +522,7 @@
       const { width, height, percent } = readSettings();
       els.widthInput.value = String(width);
       els.heightInput.value = String(height);
+      const { width, height, percent } = readSettings();
       newGame(width, height, percent);
       setSettingsVisible(false);
       showToast("Новая игра: " + width + "×" + height, null);
