@@ -391,19 +391,6 @@
       if (e.touches.length === 1) startLongPress();
     };
 
-    const onTouchMove = (e) => {
-      const touch = e.touches[0];
-      const rect = cell.getBoundingClientRect();
-      if (
-        touch.clientX < rect.left-5 ||
-        touch.clientX > rect.right+5 ||
-        touch.clientY < rect.top-5 ||
-        touch.clientY > rect.bottom+5
-      ) {
-        cancelLongPress();
-      }
-    };
-
     const onTouchEnd = (e) => {
       cancelLongPress();
       if (longPressTriggered) {
@@ -412,7 +399,6 @@
     };
 
     cell.addEventListener("touchstart", onTouchStart, { passive: true });
-    cell.addEventListener("touchmove", onTouchMove, { passive: true });
     cell.addEventListener("touchend", onTouchEnd, { passive: false });
   }
 
