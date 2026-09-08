@@ -4,11 +4,11 @@
   "use strict";
 
   const MIN_DIM = 5;
-  const MAX_DIM = 20;
+  const MAX_DIM = 15;
   const MIN_PERCENT = 5;
-  const MAX_PERCENT = 40;
-  const DEFAULT_WIDTH = 9;
-  const DEFAULT_HEIGHT = 9;
+  const MAX_PERCENT = 50;
+  const DEFAULT_WIDTH = 10;
+  const DEFAULT_HEIGHT = 10;
   const DEFAULT_PERCENT = 15;
   const LEADERBOARD_KEY = "minesweeper:scores";
   const MAX_SCORES = 5;
@@ -395,10 +395,10 @@
       const touch = e.touches[0];
       const rect = cell.getBoundingClientRect();
       if (
-        touch.clientX < rect.left ||
-        touch.clientX > rect.right ||
-        touch.clientY < rect.top ||
-        touch.clientY > rect.bottom
+        touch.clientX < rect.left-5 ||
+        touch.clientX > rect.right+5 ||
+        touch.clientY < rect.top-5 ||
+        touch.clientY > rect.bottom+5
       ) {
         cancelLongPress();
       }
