@@ -7,8 +7,8 @@
   const MAX_DIM = 14;
   const MIN_PERCENT = 5;
   const MAX_PERCENT = 50;
-  const DEFAULT_WIDTH = 10;
-  const DEFAULT_HEIGHT = 10;
+  const DEFAULT_WIDTH = 9;
+  const DEFAULT_HEIGHT = 9;
   const DEFAULT_PERCENT = 15;
   const LEADERBOARD_KEY = "minesweeper:scores";
   const MAX_SCORES = 5;
@@ -261,6 +261,7 @@
     setFace("🙂");
     buildBoardDOM(state.board);
     renderBoard();
+
   }
 
   /* ---------- Игровые действия ---------- */
@@ -379,8 +380,8 @@
         const r = Number(cell.dataset.r);
         const c = Number(cell.dataset.c);
         toggleFlag(r, c);
-        navigator.vibrate && navigator.vibrate(20);
-      }, 400);
+        navigator.vibrate && navigator.vibrate(100);
+      }, 500);
     };
 
     const cancelLongPress = () => {
