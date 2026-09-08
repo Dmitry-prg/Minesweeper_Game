@@ -4,7 +4,7 @@
   "use strict";
 
   const MIN_DIM = 5;
-  const MAX_DIM = 15;
+  const MAX_DIM = 14;
   const MIN_PERCENT = 5;
   const MAX_PERCENT = 50;
   const DEFAULT_WIDTH = 10;
