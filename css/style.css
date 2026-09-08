@@ -501,6 +501,36 @@ body {
   color: var(--danger);
 }
 
+.mode-group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.mode-btn {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  color: var(--muted);
+}
+
+.mode-btn.active {
+  border-color: var(--accent);
+  background: rgba(91, 140, 255, 0.15);
+  color: var(--text);
+}
+
+.mode-btn:hover {
+  color: var(--text);
+}
+
+
+
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
   .app {

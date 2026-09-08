@@ -35,6 +35,9 @@
     leaderboard: $("leaderboard"),
     shareBtn: $("share-btn"),
     toast: $("toast"),
+    // Новые элементы для переключения режима
+    modeOpen: $("mode-open"),
+    modeFlag: $("mode-flag"),
   };
 
   const state = {
@@ -48,6 +51,7 @@
     timerInterval: null,
     flagCount: 0,
     longPressTimer: null,
+    mode: "open", // "open" | "flag"  <-- добавлено
   };
 
   /* ---------- Хранилище результатов ---------- */
@@ -261,7 +265,6 @@
     setFace("🙂");
     buildBoardDOM(state.board);
     renderBoard();
-
   }
 
   /* ---------- Игровые действия ---------- */
@@ -354,94 +357,111 @@
     els.resetBtn.textContent = emoji;
   }
 
+  /* ---------- Переключение режима ---------- */
+  function setMode(mode) {
+    state.mode = mode;
+    els.modeOpen.classList.toggle("active", mode === "open");
+    els.modeFlag.classList.toggle("active", mode === "flag");
+  }
+
   /* ---------- Обработчики клеток ---------- */
 
   function attachCellHandlers(cell) {
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-  // ---- Десктоп: стандартные события ----
-  if (!isTouchDevice) {
-    cell.addEventListener("click", () => {
-      const r = Number(cell.dataset.r);
-      const c = Number(cell.dataset.c);
-      openCell(r, c);
-    });
+    // Вспомогательные функции: основное и второстепенное действие
+    const getPrimary = (r, c) => () => {
+      if (state.mode === 'open') openCell(r, c);
+      else toggleFlag(r, c);
+    };
+    const getSecondary = (r, c) => () => {
+      if (state.mode === 'open') toggleFlag(r, c);
+      else openCell(r, c);
+    };
 
-    cell.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-      const r = Number(cell.dataset.r);
-      const c = Number(cell.dataset.c);
-      toggleFlag(r, c);
-    });
-    return;
-  }
+    // ---- Десктоп: стандартные события ----
+    if (!isTouchDevice) {
+      cell.addEventListener("click", () => {
+        const r = Number(cell.dataset.r);
+        const c = Number(cell.dataset.c);
+        getPrimary(r, c)();
+      });
 
-  // ---- Мобильные устройства: touch-события ----
-  let touchStartTime = 0;
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let longPressTriggered = false;
-  let longPressTimer = null;
-
-  const cancelLongPress = () => {
-    clearTimeout(longPressTimer);
-    longPressTimer = null;
-  };
-
-  const onTouchStart = (e) => {
-    if (e.touches.length !== 1) return;
-    const touch = e.touches[0];
-    touchStartTime = Date.now();
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-    longPressTriggered = false;
-
-    cancelLongPress();
-    longPressTimer = setTimeout(() => {
-      longPressTriggered = true;
-      const r = Number(cell.dataset.r);
-      const c = Number(cell.dataset.c);
-      toggleFlag(r, c);
-      navigator.vibrate && navigator.vibrate(100);
-      e.preventDefault(); // блокируем дальнейшие события
-      cancelLongPress();
-    }, 350); // длительность удержания
-  };
-
-  const onTouchEnd = (e) => {
-    cancelLongPress();
-    if (longPressTriggered) {
-      e.preventDefault();
+      cell.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        const r = Number(cell.dataset.r);
+        const c = Number(cell.dataset.c);
+        getSecondary(r, c)();
+      });
       return;
     }
 
-    const touch = e.changedTouches[0];
-    if (!touch) return;
+    // ---- Мобильные устройства: touch-события ----
+    let touchStartTime = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let longPressTriggered = false;
+    let longPressTimer = null;
 
-    const dt = Date.now() - touchStartTime;
-    const dx = Math.abs(touch.clientX - touchStartX);
-    const dy = Math.abs(touch.clientY - touchStartY);
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const cancelLongPress = () => {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    };
 
-    // Короткое касание без движения → открыть ячейку
-    if (dt < 300 && distance < 10) {
-      const r = Number(cell.dataset.r);
-      const c = Number(cell.dataset.c);
-      openCell(r, c);
-    }
+    const onTouchStart = (e) => {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      touchStartTime = Date.now();
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      longPressTriggered = false;
 
-    e.preventDefault(); // предотвращаем генерацию click
-  };
+      cancelLongPress();
+      longPressTimer = setTimeout(() => {
+        longPressTriggered = true;
+        const r = Number(cell.dataset.r);
+        const c = Number(cell.dataset.c);
+        getSecondary(r, c)(); // долгое нажатие = второстепенное действие
+        navigator.vibrate && navigator.vibrate(100);
+        e.preventDefault();
+        cancelLongPress();
+      }, 350);
+    };
 
-  const onTouchCancel = () => {
-    cancelLongPress();
-    longPressTriggered = false;
-  };
+    const onTouchEnd = (e) => {
+      cancelLongPress();
+      if (longPressTriggered) {
+        e.preventDefault();
+        return;
+      }
 
-  cell.addEventListener("touchstart", onTouchStart, { passive: false });
-  cell.addEventListener("touchend", onTouchEnd, { passive: false });
-  cell.addEventListener("touchcancel", onTouchCancel, { passive: false });
-}
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+
+      const dt = Date.now() - touchStartTime;
+      const dx = Math.abs(touch.clientX - touchStartX);
+      const dy = Math.abs(touch.clientY - touchStartY);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Короткое касание без движения → основное действие
+      if (dt < 300 && distance < 10) {
+        const r = Number(cell.dataset.r);
+        const c = Number(cell.dataset.c);
+        getPrimary(r, c)();
+      }
+
+      e.preventDefault();
+    };
+
+    const onTouchCancel = () => {
+      cancelLongPress();
+      longPressTriggered = false;
+    };
+
+    cell.addEventListener("touchstart", onTouchStart, { passive: false });
+    cell.addEventListener("touchend", onTouchEnd, { passive: false });
+    cell.addEventListener("touchcancel", onTouchCancel, { passive: false });
+  }
 
   /* ---------- Уведомления ---------- */
 
@@ -571,6 +591,11 @@
     });
 
     els.shareBtn.addEventListener("click", handleShare);
+
+    // Переключение режима
+    els.modeOpen.addEventListener("click", () => setMode("open"));
+    els.modeFlag.addEventListener("click", () => setMode("flag"));
+    setMode("open"); // начальный режим
 
     window.addEventListener("resize", () => {
       if (state.board.length) {

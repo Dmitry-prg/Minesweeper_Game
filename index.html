@@ -161,28 +161,13 @@
 
         <section class="panel panel--game" aria-label="Игровое поле">
           <div class="statusbar">
-            <div
-              class="statusbar__item"
-              id="mine-counter"
-              title="Оставшиеся мины"
-            >
-              10
+            <div class="statusbar__item" id="mine-counter">10</div>
+            <div class="mode-group">
+              <button class="mode-btn mode-btn--open active" id="mode-open" data-mode="open" aria-label="Режим открытия" title="Открыть клетку">💣</button>
+              <button class="mode-btn mode-btn--flag" id="mode-flag" data-mode="flag" aria-label="Режим флага" title="Поставить флаг">🚩</button>
             </div>
-            <button
-              class="face-btn"
-              id="reset-btn"
-              type="button"
-              aria-label="Новая игра"
-            >
-              🙂
-            </button>
-            <div
-              class="statusbar__item statusbar__item--time"
-              id="timer"
-              title="Время"
-            >
-              00:00
-            </div>
+            <button class="face-btn" id="reset-btn">🙂</button>
+            <div class="statusbar__item statusbar__item--time" id="timer">00:00</div>
           </div>
           <div class="board-wrap" id="board-wrap"></div>
           <button
