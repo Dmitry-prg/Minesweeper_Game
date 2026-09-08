@@ -357,59 +357,91 @@
   /* ---------- Обработчики клеток ---------- */
 
   function attachCellHandlers(cell) {
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
+  // ---- Десктоп: стандартные события ----
+  if (!isTouchDevice) {
     cell.addEventListener("click", () => {
       const r = Number(cell.dataset.r);
       const c = Number(cell.dataset.c);
       openCell(r, c);
     });
 
-    if (!isTouchDevice) {
-      cell.addEventListener("contextmenu", (e) => {
+    cell.addEventListener("contextmenu", (e) => {
       e.preventDefault();
       const r = Number(cell.dataset.r);
       const c = Number(cell.dataset.c);
       toggleFlag(r, c);
-      });
-    } 
-    else {
-      cell.addEventListener("contextmenu", (e) => e.preventDefault());
+    });
+    return;
+  }
+
+  // ---- Мобильные устройства: touch-события ----
+  let touchStartTime = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let longPressTriggered = false;
+  let longPressTimer = null;
+
+  const cancelLongPress = () => {
+    clearTimeout(longPressTimer);
+    longPressTimer = null;
+  };
+
+  const onTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartTime = Date.now();
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    longPressTriggered = false;
+
+    cancelLongPress();
+    longPressTimer = setTimeout(() => {
+      longPressTriggered = true;
+      const r = Number(cell.dataset.r);
+      const c = Number(cell.dataset.c);
+      toggleFlag(r, c);
+      navigator.vibrate && navigator.vibrate(100);
+      e.preventDefault(); // блокируем дальнейшие события
+      cancelLongPress();
+    }, 500); // длительность удержания
+  };
+
+  const onTouchEnd = (e) => {
+    cancelLongPress();
+    if (longPressTriggered) {
+      e.preventDefault();
+      return;
     }
 
-    let longPressTriggered = false;
+    const touch = e.changedTouches[0];
+    if (!touch) return;
 
-    const startLongPress = () => {
-      longPressTriggered = false;
-      clearTimeout(state.longPressTimer);
-      state.longPressTimer = setTimeout(() => {
-        longPressTriggered = true;
-        const r = Number(cell.dataset.r);
-        const c = Number(cell.dataset.c);
-        toggleFlag(r, c);
-        navigator.vibrate && navigator.vibrate(100);
-      }, 500);
-    };
+    const dt = Date.now() - touchStartTime;
+    const dx = Math.abs(touch.clientX - touchStartX);
+    const dy = Math.abs(touch.clientY - touchStartY);
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-    const cancelLongPress = () => {
-      clearTimeout(state.longPressTimer);
-    };
+    // Короткое касание без движения → открыть ячейку
+    if (dt < 300 && distance < 10) {
+      const r = Number(cell.dataset.r);
+      const c = Number(cell.dataset.c);
+      openCell(r, c);
+    }
 
-    const onTouchStart = (e) => {
-      if (e.touches.length === 1) startLongPress();
-    };
+    e.preventDefault(); // предотвращаем генерацию click
+  };
 
-    const onTouchEnd = (e) => {
-      cancelLongPress();
-      if (longPressTriggered) {
-        e.preventDefault();
-      }
-    };
+  const onTouchCancel = () => {
+    cancelLongPress();
+    longPressTriggered = false;
+  };
 
-    cell.addEventListener("touchstart", onTouchStart, { passive: true });
-    cell.addEventListener("touchend", onTouchEnd, { passive: false });
-  }
+  cell.addEventListener("touchstart", onTouchStart, { passive: false });
+  cell.addEventListener("touchend", onTouchEnd, { passive: false });
+  cell.addEventListener("touchcancel", onTouchCancel, { passive: false });
+}
 
   /* ---------- Уведомления ---------- */
 
