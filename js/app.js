@@ -405,7 +405,7 @@
       navigator.vibrate && navigator.vibrate(100);
       e.preventDefault(); // блокируем дальнейшие события
       cancelLongPress();
-    }, 500); // длительность удержания
+    }, 350); // длительность удержания
   };
 
   const onTouchEnd = (e) => {
