@@ -357,18 +357,26 @@
   /* ---------- Обработчики клеток ---------- */
 
   function attachCellHandlers(cell) {
+
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     cell.addEventListener("click", () => {
       const r = Number(cell.dataset.r);
       const c = Number(cell.dataset.c);
       openCell(r, c);
     });
 
-    cell.addEventListener("contextmenu", (e) => {
+    if (!isTouchDevice) {
+      cell.addEventListener("contextmenu", (e) => {
       e.preventDefault();
       const r = Number(cell.dataset.r);
       const c = Number(cell.dataset.c);
       toggleFlag(r, c);
-    });
+      });
+    } 
+    else {
+      cell.addEventListener("contextmenu", (e) => e.preventDefault());
+    }
 
     let longPressTriggered = false;
 
