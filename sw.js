@@ -1,68 +1,55 @@
-const CACHE_NAME = "saper-v1";
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./css/style.css",
-  "./js/minesweeper.js",
-  "./js/app.js",
-  "./manifest.webmanifest",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-maskable-512.png",
+/* Service Worker для игры «Сапёр» */
+
+const CACHE_NAME = 'saper-cache-v1';
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json'  // опционально, если создадите отдельный манифест
 ];
 
-self.addEventListener("install", (event) => {
+// Установка: кэшируем основные ресурсы
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS).catch(() => null))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", (event) => {
+// Активация: чистим старые кэши
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
-        )
-      )
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      ))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  if (request.method !== "GET") {
-    return;
-  }
+// Перехват запросов: cache-first с обновлением
+self.addEventListener('fetch', event => {
+  const req = event.request;
 
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) {
-    return;
-  }
+  // Пропускаем всё, кроме GET
+  if (req.method !== 'GET') return;
 
-  if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(() => caches.match("./index.html")));
-    return;
-  }
+  // Пропускаем запросы к другим origin
+  const url = new URL(req.url);
+  if (url.origin !== location.origin) return;
 
   event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) {
-        return cached;
-      }
-      return fetch(request).then((response) => {
-        if (response.ok && response.type === "basic") {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+    caches.match(req).then(cached => {
+      const network = fetch(req).then(res => {
+        // Кэшируем только валидные ответы
+        if (res && res.status === 200 && res.type === 'basic') {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(req, clone));
         }
-        return response;
-      });
+        return res;
+      }).catch(() => cached || caches.match('./index.html'));
+
+      return cached || network;
     })
   );
 });

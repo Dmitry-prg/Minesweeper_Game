@@ -1,264 +1,1718 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <meta name="theme-color" content="#0b0e14" />
-    <meta
-      name="description"
-      content="Классическая игра «Сапёр» с настройкой поля, таймером и таблицей лучших результатов."
-    />
-    <meta name="application-name" content="Сапёр" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <meta name="apple-mobile-web-app-title" content="Сапёр" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-TileColor" content="#0b0e14" />
-    <title>Сапёр</title>
-    <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💣</text></svg>"
-    />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-    <link rel="apple-touch-startup-image" href="apple-touch-icon.png" />
-    <link rel="mask-icon" href="icon.svg" color="#5b8cff" />
-  </head>
-  <body>
-    <div class="app">
-      <header class="app__header">
-        <button
-          class="btn btn--icon btn--share"
-          id="share-btn"
-          type="button"
-          aria-label="Поделиться"
-          title="Поделиться"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="22"
-            height="22"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-            <polyline points="16 6 12 2 8 6"></polyline>
-            <line x1="12" y1="2" x2="12" y2="15"></line>
-          </svg>
-        </button>
-        <div class="app__logo" role="img" aria-label="Сапёр — логотип мина">
-          <svg
-            class="app__logo-icon"
-            viewBox="0 0 64 64"
-            width="56"
-            height="56"
-            aria-hidden="true"
-          >
-            <circle
-              cx="32"
-              cy="38"
-              r="22"
-              fill="#0f1218"
-              stroke="url(#mineGrad)"
-              stroke-width="3"
-            />
-            <path
-              d="M32 16 v-9"
-              stroke="#e6ebf4"
-              stroke-width="4"
-              stroke-linecap="round"
-            />
-            <path
-              d="M30 10 q7 -6 13 -3"
-              stroke="#ff9f43"
-              stroke-width="4"
-              fill="none"
-              stroke-linecap="round"
-            />
-            <circle cx="30" cy="9" r="3.5" fill="#ffd27a" />
-            <circle cx="26" cy="30" r="3" fill="#e6ebf4" />
-            <circle cx="38" cy="28" r="3" fill="#e6ebf4" />
-            <rect x="29" y="44" width="6" height="4" rx="1" fill="#8b97ab" />
-            <defs>
-              <linearGradient id="mineGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#5b8cff" />
-                <stop offset="1" stop-color="#7ba3ff" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <span class="app__title">Сапёр</span>
-        </div>
-      </header>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#14181f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Сапёр">
+<meta name="description" content="Классический Сапёр с настройками поля, флажками и таймером">
+<title>Сапёр</title>
+<style>
+  * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
-      <main class="app__main">
-        <section class="panel panel--settings" aria-label="Настройка поля">
-          <form id="settings-form" class="settings" novalidate>
-            <div class="field">
-              <div class="field__row">
-                <label class="field__label" for="width">Ширина</label>
-                <output class="field__value" id="width-value" for="width"
-                  >9</output
-                >
-              </div>
-              <input
-                class="field__range"
-                id="width"
-                type="range"
-                min="5"
-                max="14"
-                value="9"
-              />
-            </div>
-            <div class="field">
-              <div class="field__row">
-                <label class="field__label" for="height">Высота</label>
-                <output class="field__value" id="height-value" for="height"
-                  >9</output
-                >
-              </div>
-              <input
-                class="field__range"
-                id="height"
-                type="range"
-                min="5"
-                max="14"
-                value="9"
-              />
-            </div>
-            <div class="field field--wide">
-              <div class="field__row">
-                <label class="field__label" for="mines">Мин</label>
-                <output class="field__value" id="mines-value" for="mines"
-                  >15%</output
-                >
-              </div>
-              <input
-                class="field__range"
-                id="mines"
-                type="range"
-                min="5"
-                max="50"
-                value="15"
-              />
-            </div>
-            <button class="btn btn--primary btn--wide" type="submit">
-              Новая игра
-            </button>
-          </form>
-        </section>
+  :root {
+    --cell: 32px;
+    --gap: 2px;
+  }
 
-        <section class="panel panel--game" aria-label="Игровое поле">
-          <div class="statusbar">
-            <div
-              class="statusbar__item"
-              id="mine-counter"
-              title="Оставшиеся мины"
-            >
-              10
-            </div>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overscroll-behavior: none;
+  }
 
-            <!-- ===== НОВЫЕ КНОПКИ ПЕРЕКЛЮЧЕНИЯ РЕЖИМА ===== -->
-            <div class="mode-group">
-              <button
-                class="mode-btn mode-btn--open active"
-                id="mode-open"
-                data-mode="open"
-                aria-label="Режим открытия"
-                title="Открыть клетку"
-              >
-                💣
-              </button>
-              <button
-                class="mode-btn mode-btn--flag"
-                id="mode-flag"
-                data-mode="flag"
-                aria-label="Режим флага"
-                title="Поставить флаг"
-              >
-                🚩
-              </button>
-            </div>
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: radial-gradient(circle at 50% 0%, #2b3a55, #14181f 70%);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #e8eefc;
+    touch-action: manipulation;
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
 
-            <button
-              class="face-btn"
-              id="reset-btn"
-              type="button"
-              aria-label="Новая игра"
-            >
-              🙂
-            </button>
-            <div
-              class="statusbar__item statusbar__item--time"
-              id="timer"
-              title="Время"
-            >
-              00:00
-            </div>
-          </div>
-          <div class="board-wrap" id="board-wrap"></div>
-          <button
-            class="btn btn--primary btn--restart hidden"
-            id="restart-settings-btn"
-            type="button"
-          >
-            Новая игра
-          </button>
-        </section>
+  /* ==================== ШАПКА ==================== */
+  .game-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: max(8px, env(safe-area-inset-top))
+             max(12px, env(safe-area-inset-right))
+             8px
+             max(12px, env(safe-area-inset-left));
+    background: rgba(20, 24, 31, 0.78);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid rgba(60, 81, 112, 0.45);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+  }
 
-        <section
-          class="panel panel--leaderboard"
-          aria-label="Таблица лучших результатов"
-        >
-          <div class="panel__head">
-            <h2 class="panel__title">Лучшие результаты</h2>
-            <button
-              class="btn btn--ghost"
-              id="reset-leaderboard-btn"
-              type="button"
-            >
-              Сбросить
-            </button>
-          </div>
-          <div id="leaderboard"></div>
-        </section>
-      </main>
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    max-width: 900px;
+  }
 
-      <footer class="app__footer">
-        <a
-          class="app__footer-link"
-          href="https://github.com/Dmitry-prg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Dmitry Davydov
-        </a>
-      </footer>
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 2.5vw, 14px);
+    min-width: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: clamp(38px, 10.5vw, 44px);
+    height: clamp(38px, 10.5vw, 44px);
+    border-radius: 12px;
+    border: 2px solid #3c5170;
+    background: linear-gradient(180deg, #2c3a50, #1e2735);
+    color: #d5e0f4;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(15px, 4.3vw, 18px);
+    transition: background .15s, transform .1s, border-color .15s;
+    touch-action: manipulation;
+    padding: 0;
+    font-family: inherit;
+  }
+  .icon-btn:hover { background: linear-gradient(180deg, #354660, #26334a); border-color: #4f6b94; }
+  .icon-btn:active { transform: scale(.92); }
+
+  .logo {
+    width: clamp(34px, 9.5vw, 48px);
+    height: clamp(34px, 9.5vw, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: logoFloat 3.2s ease-in-out infinite;
+    transform-origin: 50% 60%;
+    touch-action: manipulation;
+    transition: filter .2s;
+    flex-shrink: 0;
+  }
+  .logo:hover { filter: drop-shadow(0 0 12px rgba(255,180,90,.6)); }
+  .logo svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+  @keyframes logoFloat {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50%      { transform: translateY(-5px) rotate(4deg); }
+  }
+
+  .logo.boom { animation: logoBoom .7s cubic-bezier(.36,.07,.19,.97); }
+  @keyframes logoBoom {
+    0%   { transform: scale(1) rotate(0deg); filter: none; }
+    20%  { transform: scale(1.35) rotate(-14deg); filter: drop-shadow(0 0 24px #ffd166) brightness(1.6); }
+    45%  { transform: scale(1.15) rotate(10deg); filter: drop-shadow(0 0 30px #ff5b5b) brightness(1.4); }
+    70%  { transform: scale(1.08) rotate(-4deg); filter: drop-shadow(0 0 14px #ffb347); }
+    100% { transform: scale(1) rotate(0deg); filter: none; }
+  }
+
+  .logo-glow { animation: glowPulse 1.4s ease-in-out infinite; }
+  @keyframes glowPulse {
+    0%, 100% { opacity: .35; }
+    50%      { opacity: .85; }
+  }
+
+  .spark { animation: sparkFlicker .35s steps(2) infinite; transform-origin: 66px 8px; }
+  @keyframes sparkFlicker {
+    0%   { opacity: 1; transform: scale(1); }
+    50%  { opacity: .55; transform: scale(.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .title {
+    margin: 0;
+    font-size: clamp(20px, 6.5vw, 34px);
+    letter-spacing: clamp(2px, 1.2vw, 6px);
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #9db8e8;
+    display: inline-flex;
+    text-shadow: 0 2px 10px rgba(80,130,220,.4);
+    cursor: default;
+    white-space: nowrap;
+  }
+
+  .title-letter {
+    display: inline-block;
+    position: relative;
+    padding: 0 1px;
+    will-change: transform, color;
+    cursor: pointer;
+    color: inherit;
+    text-shadow: inherit;
+  }
+
+  .title-letter.exploding {
+    animation: letterBoom .85s cubic-bezier(.36,.07,.19,.97);
+  }
+
+  @keyframes letterBoom {
+    0%   { transform: scale(1) rotate(0deg) translateY(0); color: #9db8e8; text-shadow: 0 2px 10px rgba(80,130,220,.4); }
+    12%  { transform: scale(1.08) rotate(0deg) translateY(0); color: #ffffff; text-shadow: 0 0 22px #ffffff; }
+    24%  { transform: scale(1.6) rotate(-14deg) translateY(-7px); color: #ff5b5b; text-shadow: 0 0 26px #ff5b5b, 0 0 52px #ff5b5b; }
+    38%  { transform: scale(1.3) rotate(12deg) translateY(-2px); color: #ffd166; text-shadow: 0 0 30px #ffd166, 0 0 62px #ffd166; }
+    52%  { transform: scale(1.55) rotate(-9deg) translateY(-5px); color: #ffb347; text-shadow: 0 0 32px #ffb347; }
+    68%  { transform: scale(1.15) rotate(6deg) translateY(-1px); color: #ff8b5b; text-shadow: 0 0 20px #ff8b5b; }
+    84%  { transform: scale(1.05) rotate(-2deg); color: #a9bcdc; text-shadow: 0 0 8px rgba(80,130,220,.5); }
+    100% { transform: scale(1) rotate(0deg) translateY(0); color: #9db8e8; text-shadow: 0 2px 10px rgba(80,130,220,.4); }
+  }
+
+  .particle {
+    position: fixed;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    will-change: transform, opacity;
+  }
+
+  /* ==================== КОНТЕНТ ==================== */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px max(10px, env(safe-area-inset-right))
+             max(12px, env(safe-area-inset-bottom))
+             max(10px, env(safe-area-inset-left));
+    gap: 12px;
+  }
+
+  .panel {
+    background: #1a2230;
+    border: 1px solid #2e3d54;
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.55);
+    max-width: 100%;
+  }
+
+  .hud {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .counter {
+    font-family: "Consolas", monospace;
+    font-size: clamp(16px, 4.5vw, 20px);
+    font-weight: bold;
+    background: #0d1117;
+    color: #ff5b5b;
+    padding: 5px 9px;
+    border-radius: 8px;
+    border: 1px solid #2e3d54;
+    min-width: 58px;
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  .counter.time {
+    color: #5bd4ff;
+    min-width: 78px;
+    font-variant-numeric: tabular-nums;
+  }
+  .counter.time .sep {
+    animation: sepPulse 1s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes sepPulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .35; }
+  }
+
+  .face {
+    width: clamp(38px, 11vw, 46px);
+    height: clamp(38px, 11vw, 46px);
+    font-size: clamp(20px, 5.5vw, 24px);
+    border-radius: 50%;
+    border: 2px solid #3c5170;
+    background: linear-gradient(180deg, #2c3a50, #1e2735);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .12s;
+    touch-action: manipulation;
+    padding: 0;
+  }
+  .face:active { transform: scale(.95); }
+
+  .mode-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 2px solid #3c5170;
+    background: linear-gradient(180deg, #2c3a50, #1e2735);
+    color: #d5e0f4;
+    cursor: pointer;
+    transition: .15s;
+    touch-action: manipulation;
+    font-family: inherit;
+    min-width: 68px;
+    height: clamp(38px, 11vw, 46px);
+  }
+  .mode-btn .icon { font-size: clamp(15px, 4.5vw, 18px); line-height: 1; }
+  .mode-btn .label {
+    font-size: clamp(9px, 2.5vw, 11px);
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .mode-btn.flag-mode {
+    border-color: #ff6b6b;
+    background: linear-gradient(180deg, #5a2a2a, #3a1a1a);
+    color: #ffd1d1;
+    box-shadow: 0 0 14px rgba(255,80,80,.4);
+  }
+  .mode-btn:active { transform: scale(.96); }
+
+  .board-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    max-width: 100%;
+    touch-action: pan-x pan-y;
+  }
+  .board-wrap::-webkit-scrollbar { height: 6px; }
+  .board-wrap::-webkit-scrollbar-thumb { background: #3c5170; border-radius: 3px; }
+
+  #board {
+    display: grid;
+    gap: var(--gap);
+    background: #0f151d;
+    padding: 4px;
+    border-radius: 8px;
+    width: max-content;
+    touch-action: manipulation;
+  }
+
+  .cell {
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: calc(var(--cell) * 0.55);
+    font-family: "Consolas", monospace;
+    cursor: pointer;
+    background: linear-gradient(160deg, #4a5d7a, #35465e);
+    border: 1px solid rgba(255,255,255,.08);
+    transition: background .1s, transform .06s;
+    line-height: 1;
+    touch-action: manipulation;
+  }
+  .cell:active:not(.open) { transform: scale(.9); }
+
+  .cell.open { background: #1c2532; border-color: #232f40; cursor: default; }
+  .cell.flag { color: #ff6b6b; }
+  .cell.mine { background: #7d2020 !important; }
+  .cell.mine-hit { background: #e33 !important; }
+  .cell.wrong { background: #4a2c2c !important; color: #ff9a9a; }
+
+  .n1 { color: #5b9dff; }
+  .n2 { color: #4ddc7a; }
+  .n3 { color: #ff6b6b; }
+  .n4 { color: #b57bff; }
+  .n5 { color: #ffb347; }
+  .n6 { color: #38d9d9; }
+  .n7 { color: #d9d9d9; }
+  .n8 { color: #9aa7bb; }
+
+  .msg {
+    margin-top: 8px;
+    text-align: center;
+    font-size: clamp(12px, 3.5vw, 14px);
+    min-height: 18px;
+    color: #9db8e8;
+  }
+
+  /* ==================== МОДАЛЬНОЕ ОКНО ==================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 16, .72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    animation: fadeIn .18s ease;
+  }
+  .modal-overlay.show { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popIn {
+    from { opacity: 0; transform: translateY(12px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal {
+    background: linear-gradient(180deg, #22304a, #1a2230);
+    border: 1px solid #3c5170;
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 340px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,.65), 0 0 0 1px rgba(108,156,232,.1) inset;
+    animation: popIn .22s cubic-bezier(.2,.9,.3,1.2);
+  }
+
+  .modal h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #cddffa;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* Кнопка установки PWA */
+  .install-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 14px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    border: 1px dashed rgba(91,212,255,.5);
+    background: linear-gradient(180deg, rgba(91,212,255,.14), rgba(91,212,255,.06));
+    color: #9fdcf5;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    cursor: pointer;
+    transition: .15s;
+    touch-action: manipulation;
+  }
+  .install-btn:hover {
+    background: linear-gradient(180deg, rgba(91,212,255,.22), rgba(91,212,255,.1));
+    border-color: rgba(91,212,255,.8);
+    color: #c9ecfa;
+  }
+  .install-btn:active { transform: scale(.98); }
+  .install-btn .icon { font-size: 17px; line-height: 1; }
+
+  .install-hint {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    background: rgba(91,212,255,.08);
+    border: 1px solid rgba(91,212,255,.2);
+    color: #7ac8e8;
+    font-size: 12px;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  /* ---------- Пресеты (уровни сложности) ---------- */
+  .presets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .preset-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 11px 6px;
+    border-radius: 10px;
+    border: 2px solid #3c5170;
+    background: linear-gradient(180deg, #2a3446, #1e2735);
+    color: #d5e0f4;
+    cursor: pointer;
+    font-family: inherit;
+    transition: .15s;
+    touch-action: manipulation;
+    text-align: center;
+  }
+  .preset-btn:hover {
+    background: linear-gradient(180deg, #354660, #26334a);
+    border-color: #4f6b94;
+  }
+  .preset-btn:active { transform: scale(.97); }
+  .preset-btn.active {
+    border-color: #6c9ce8;
+    background: linear-gradient(180deg, #3b5f9e, #2d4a80);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(90,140,230,.5);
+  }
+  .preset-btn.active .preset-name { color: #fff; }
+  .preset-btn.active .preset-info { color: #bcd4ff; }
+
+  .preset-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    color: #e0ecff;
+  }
+  .preset-info {
+    font-size: 10.5px;
+    font-family: "Consolas", monospace;
+    color: #7f97bd;
+    letter-spacing: .2px;
+  }
+
+  /* ---------- Выпадающая секция "Настроить под себя" ---------- */
+  .custom-section {
+    margin-bottom: 8px;
+    border: 1px solid #3c5170;
+    border-radius: 10px;
+    background: rgba(15, 21, 29, .4);
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .custom-section.open { border-color: #4f6b94; }
+
+  .custom-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    background: none;
+    border: none;
+    color: #cddffa;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background .15s;
+  }
+  .custom-header:hover { background: rgba(90,140,230,.08); }
+  .custom-header:active { background: rgba(90,140,230,.14); }
+
+  .custom-header .arrow {
+    display: inline-block;
+    font-size: 12px;
+    color: #7f97bd;
+    transition: transform .25s ease;
+    transform: rotate(0deg);
+  }
+  .custom-section.open .custom-header .arrow {
+    transform: rotate(180deg);
+    color: #6c9ce8;
+  }
+
+  .custom-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease, padding .3s ease, opacity .25s ease;
+    opacity: 0;
+    padding: 0 14px;
+  }
+  .custom-section.open .custom-body {
+    max-height: 400px;
+    opacity: 1;
+    padding: 6px 14px 14px;
+  }
+
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    color: #9db8e8;
+    margin-bottom: 6px;
+    letter-spacing: .3px;
+  }
+  .field label .val {
+    font-family: "Consolas", monospace;
+    font-weight: bold;
+    color: #5bd4ff;
+    font-size: 15px;
+  }
+
+  .slider-row { display: flex; align-items: center; gap: 10px; }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #0d1117;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #6ea6ff, #3b6fce);
+    border: 2px solid #1a2230;
+    box-shadow: 0 0 12px rgba(90,140,230,.6);
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #6ea6ff, #3b6fce);
+    border: 2px solid #1a2230;
+    box-shadow: 0 0 12px rgba(90,140,230,.6);
+    cursor: pointer;
+  }
+
+  .num-input {
+    width: 62px;
+    padding: 6px 8px;
+    text-align: center;
+    font-family: "Consolas", monospace;
+    font-size: 15px;
+    font-weight: bold;
+    color: #5bd4ff;
+    background: #0d1117;
+    border: 1px solid #2e3d54;
+    border-radius: 8px;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .num-input::-webkit-outer-spin-button,
+  .num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .num-input:focus { border-color: #4b7fd6; }
+
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-actions button {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: .15s;
+    touch-action: manipulation;
+  }
+  .btn-cancel {
+    background: #2a3446;
+    color: #a9bcdc;
+    border: 1px solid #3c5170 !important;
+  }
+  .btn-cancel:hover { background: #333f55; }
+  .btn-apply {
+    background: linear-gradient(180deg, #4b7fd6, #3560aa);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(75,127,214,.4);
+  }
+  .btn-apply:hover { filter: brightness(1.1); }
+  .modal-actions button:active { transform: scale(.97); }
+
+  .error-msg {
+    color: #ff7b7b;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 0;
+    min-height: 14px;
+  }
+
+  .mobile-note {
+    background: rgba(91,212,255,.08);
+    border: 1px solid rgba(91,212,255,.2);
+    color: #7ac8e8;
+    font-size: 11.5px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    text-align: center;
+    line-height: 1.4;
+    display: none;
+  }
+  .mobile-note.show { display: block; }
+
+  .mine-hint {
+    font-size: 11px;
+    color: #6f88b3;
+    text-align: center;
+    margin-top: 6px;
+    letter-spacing: .3px;
+  }
+
+  /* ==================== ТОСТ ==================== */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1a2230;
+    border: 1px solid #3c5170;
+    color: #d5e0f4;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    z-index: 300;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    box-shadow: 0 10px 30px rgba(0,0,0,.55);
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== ШАПКА ==================== -->
+<header class="game-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="logo" id="logo" aria-hidden="true" title="Бум!">
+        <svg viewBox="0 0 80 80">
+          <defs>
+            <radialGradient id="bombGrad" cx="0.35" cy="0.35" r="0.75">
+              <stop offset="0%" stop-color="#5a6a82"/>
+              <stop offset="60%" stop-color="#2a3446"/>
+              <stop offset="100%" stop-color="#0f151d"/>
+            </radialGradient>
+            <radialGradient id="glowGrad" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%" stop-color="#ffd166" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#ffd166" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="bodyGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%" stop-color="#ffb347" stop-opacity=".55"/>
+              <stop offset="100%" stop-color="#ffb347" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle class="logo-glow" cx="36" cy="48" r="34" fill="url(#bodyGlow)"/>
+          <circle cx="36" cy="48" r="20" fill="url(#bombGrad)" stroke="#3c5170" stroke-width="1.6"/>
+          <ellipse cx="29" cy="41" rx="6.5" ry="4.5" fill="#ffffff" opacity=".2"/>
+          <ellipse cx="30" cy="40" rx="3" ry="2" fill="#ffffff" opacity=".35"/>
+          <path d="M53 28 Q60 16 68 10" stroke="#8b6f4e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+          <path d="M53 28 Q60 16 68 10" stroke="#b59468" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".7"/>
+          <g class="spark">
+            <circle cx="68" cy="10" r="9" fill="url(#glowGrad)"/>
+            <circle cx="68" cy="10" r="3.5" fill="#ffd166"/>
+            <circle cx="68" cy="10" r="1.6" fill="#fffef0"/>
+          </g>
+        </svg>
+      </div>
+      <h1 class="title" id="title" aria-label="Сапёр"></h1>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="shareBtn" title="Поделиться" aria-label="Поделиться">🔗</button>
+      <button class="icon-btn" id="settingsBtn" title="Настройки поля" aria-label="Настройки поля">⚙️</button>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== КОНТЕНТ ==================== -->
+<main>
+  <div class="panel">
+    <div class="hud">
+      <div class="counter" id="mineCount">010</div>
+      <button class="face" id="face" title="Новая игра">🙂</button>
+      <button class="mode-btn" id="modeBtn" title="Переключить режим">
+        <span class="icon" id="modeIcon">⛏️</span>
+        <span class="label" id="modeLabel">Открыть</span>
+      </button>
+      <div class="counter time" id="timer">
+        <span id="timerMin">00</span><span class="sep">:</span><span id="timerSec">00</span>
+      </div>
     </div>
 
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="board-wrap">
+      <div id="board"></div>
+    </div>
 
-    <script src="js/minesweeper.js"></script>
-    <script src="js/app.js"></script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("./sw.js").catch((error) => {
-            console.error("Ошибка регистрации service worker:", error);
-          });
-        });
+    <div class="msg" id="msg"></div>
+  </div>
+</main>
+
+<!-- ---------- Модальное окно настроек ---------- -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Настройки поля</h2>
+
+    <!-- Кнопка установки PWA -->
+    <button class="install-btn" id="installBtn" style="display:none">
+      <span class="icon">📲</span>
+      <span id="installBtnLabel">Установить приложение</span>
+    </button>
+    <div class="install-hint" id="installHint" style="display:none"></div>
+
+    <!-- Пресеты уровней сложности -->
+    <div class="presets" id="presets">
+      <button class="preset-btn" data-preset="easy">
+        <span class="preset-name">Лёгкий</span>
+        <span class="preset-info">9×9 · 10</span>
+      </button>
+      <button class="preset-btn" data-preset="medium">
+        <span class="preset-name">Средний</span>
+        <span class="preset-info">16×16 · 40</span>
+      </button>
+      <button class="preset-btn" data-preset="hard">
+        <span class="preset-name">Сложный</span>
+        <span class="preset-info">30×16 · 99</span>
+      </button>
+    </div>
+
+    <div class="mobile-note" id="mobileNote"></div>
+
+    <!-- Выпадающая секция "Настроить под себя" -->
+    <div class="custom-section" id="customSection">
+      <button class="custom-header" id="customHeader" type="button">
+        <span>🎛️ Настроить под себя</span>
+        <span class="arrow">▼</span>
+      </button>
+      <div class="custom-body" id="customBody">
+        <div class="field">
+          <label>Ширина <span class="val" id="colsVal">9</span></label>
+          <div class="slider-row">
+            <input type="range" id="colsRange" min="5" max="40" value="9">
+            <input type="number" class="num-input" id="colsInput" min="5" max="40" value="9">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Высота <span class="val" id="rowsVal">9</span></label>
+          <div class="slider-row">
+            <input type="range" id="rowsRange" min="5" max="30" value="9">
+            <input type="number" class="num-input" id="rowsInput" min="5" max="30" value="9">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Мины <span class="val" id="minesVal">10</span></label>
+          <div class="slider-row">
+            <input type="range" id="minesRange" min="1" max="100" value="10">
+            <input type="number" class="num-input" id="minesInput" min="1" max="100" value="10">
+          </div>
+          <div class="mine-hint" id="mineHint">Плотность: 12% (макс. 35%)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelBtn">Отмена</button>
+      <button class="btn-apply" id="applyBtn">Применить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ==================== ТОСТ ==================== */
+  const toastEl = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(text, duration = 2200) {
+    toastEl.textContent = text;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
+  }
+
+  /* ==================== PWA ==================== */
+  (function setupPWA() {
+    function makeIcon(size) {
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const ctx = c.getContext('2d');
+      const s = size / 100;
+
+      const bg = ctx.createLinearGradient(0, 0, 0, size);
+      bg.addColorStop(0, '#2b3a55');
+      bg.addColorStop(1, '#14181f');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, size, size);
+
+      const glow = ctx.createRadialGradient(size * 0.5, size * 0.58, 0, size * 0.5, size * 0.58, size * 0.5);
+      glow.addColorStop(0, 'rgba(255,179,71,0.4)');
+      glow.addColorStop(1, 'rgba(255,179,71,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, size, size);
+
+      const cx = size * 0.45, cy = size * 0.6, r = size * 0.26;
+      const bgrad = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.35, r * 0.1, cx, cy, r);
+      bgrad.addColorStop(0, '#5a6a82');
+      bgrad.addColorStop(0.6, '#2a3446');
+      bgrad.addColorStop(1, '#0f151d');
+      ctx.fillStyle = bgrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#3c5170';
+      ctx.lineWidth = size * 0.015;
+      ctx.stroke();
+
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.beginPath();
+      ctx.ellipse(cx - r * 0.35, cy - r * 0.4, r * 0.32, r * 0.2, -0.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.beginPath();
+      ctx.ellipse(cx - r * 0.3, cy - r * 0.45, r * 0.15, r * 0.09, -0.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#b59468';
+      ctx.lineWidth = size * 0.04;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(cx + r * 0.85, cy - r * 0.55);
+      ctx.quadraticCurveTo(cx + r * 1.3, cy - r * 1.3, cx + r * 1.7, cy - r * 1.7);
+      ctx.stroke();
+
+      const sx = cx + r * 1.7, sy = cy - r * 1.7;
+      const sglow = ctx.createRadialGradient(sx, sy, 0, sx, sy, size * 0.15);
+      sglow.addColorStop(0, 'rgba(255,209,102,0.95)');
+      sglow.addColorStop(1, 'rgba(255,209,102,0)');
+      ctx.fillStyle = sglow;
+      ctx.fillRect(sx - size * 0.15, sy - size * 0.15, size * 0.3, size * 0.3);
+
+      ctx.fillStyle = '#ffd166';
+      ctx.beginPath();
+      ctx.arc(sx, sy, size * 0.045, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fffef0';
+      ctx.beginPath();
+      ctx.arc(sx, sy, size * 0.02, 0, Math.PI * 2);
+      ctx.fill();
+
+      return c.toDataURL('image/png');
+    }
+
+    const icon192 = makeIcon(192);
+    const icon512 = makeIcon(512);
+
+    const manifest = {
+      name: 'Сапёр',
+      short_name: 'Сапёр',
+      description: 'Классический Сапёр с настройками поля',
+      start_url: '.',
+      scope: '.',
+      display: 'standalone',
+      orientation: 'any',
+      background_color: '#14181f',
+      theme_color: '#14181f',
+      lang: 'ru',
+      icons: [
+        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+      ]
+    };
+
+    const manifestUrl = 'data:application/manifest+json;charset=utf-8,' +
+      encodeURIComponent(JSON.stringify(manifest));
+
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = manifestUrl;
+    document.head.appendChild(link);
+
+    const apple = document.createElement('link');
+    apple.rel = 'apple-touch-icon';
+    apple.href = makeIcon(180);
+    document.head.appendChild(apple);
+
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.type = 'image/png';
+    favicon.href = makeIcon(64);
+    document.head.appendChild(favicon);
+
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+      });
+    }
+  })();
+
+  /* ==================== УСТАНОВКА PWA ==================== */
+  const installBtn    = document.getElementById('installBtn');
+  const installBtnLbl = document.getElementById('installBtnLabel');
+  const installHint   = document.getElementById('installHint');
+
+  let deferredPrompt = null;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                    || window.navigator.standalone === true;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (isStandalone) {
+    installBtn.style.display = 'none';
+    installHint.style.display = 'none';
+  } else if (isIOS) {
+    installBtn.style.display = 'none';
+    installHint.style.display = 'block';
+    installHint.innerHTML = '📲 Установка на iPhone:<br>Нажмите <b>«Поделиться»</b> в Safari, затем <b>«На экран "Домой"</b>.';
+  }
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!isStandalone) {
+      installBtn.style.display = 'flex';
+      installHint.style.display = 'none';
+    }
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+      showToast('Установка недоступна в этом браузере');
+      return;
+    }
+    deferredPrompt.prompt();
+    try {
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') showToast('Приложение установлено 🎉');
+    } catch (e) {}
+    deferredPrompt = null;
+    installBtn.style.display = 'none';
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    installBtn.style.display = 'none';
+    installHint.style.display = 'none';
+    showToast('Приложение установлено 🎉');
+  });
+
+  /* ==================== ПОДЕЛИТЬСЯ ==================== */
+  const shareBtn = document.getElementById('shareBtn');
+
+  async function shareApp() {
+    const shareData = {
+      title: 'Сапёр',
+      text: 'Сыграй в классического Сапёра — с настройками поля и флажками!',
+      url: location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
       }
-    </script>
-  </body>
+    }
+
+    try {
+      await navigator.clipboard.writeText(location.href);
+      showToast('Ссылка скопирована в буфер обмена');
+    } catch (e) {
+      window.prompt('Скопируйте ссылку:', location.href);
+    }
+  }
+
+  shareBtn.addEventListener('click', shareApp);
+
+  /* ==================== ШАПКА: АНИМАЦИЯ ВЗРЫВА ==================== */
+  const titleEl = document.getElementById('title');
+  const logoEl  = document.getElementById('logo');
+  const TITLE_TEXT = 'САПЁР';
+  const PARTICLE_COLORS = ['#ffd166', '#ff5b5b', '#ffb347', '#ffffff', '#ff8b5b', '#ffecb3'];
+
+  const letters = [];
+  TITLE_TEXT.split('').forEach(ch => {
+    const span = document.createElement('span');
+    span.className = 'title-letter';
+    span.textContent = ch;
+    span.addEventListener('click', () => explodeLetter(span));
+    titleEl.appendChild(span);
+    letters.push(span);
+  });
+
+  function explodeLetter(el, strength = 1) {
+    if (!el || el.classList.contains('exploding')) return;
+    el.classList.add('exploding');
+    setTimeout(() => el.classList.remove('exploding'), 900);
+
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const count = Math.round(10 * strength);
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('span');
+      p.className = 'particle';
+      const color = PARTICLE_COLORS[(Math.random() * PARTICLE_COLORS.length) | 0];
+      p.style.background = color;
+      p.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+      p.style.left = cx + 'px';
+      p.style.top  = cy + 'px';
+      p.style.width  = (4 + Math.random() * 5) + 'px';
+      p.style.height = p.style.width;
+      document.body.appendChild(p);
+
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.6;
+      const dist  = (25 + Math.random() * 45) * strength;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist;
+
+      p.animate([
+        { transform: 'translate(-50%, -50%) scale(1)',   opacity: 1 },
+        { transform: 'translate(-50%, -50%) scale(.8)',  opacity: 1, offset: 0.15 },
+        { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0)`, opacity: 0 }
+      ], {
+        duration: 550 + Math.random() * 350,
+        easing: 'cubic-bezier(.2,.9,.3,1)'
+      }).onfinish = () => p.remove();
+    }
+  }
+
+  function bigBoom() {
+    logoEl.classList.add('boom');
+    setTimeout(() => logoEl.classList.remove('boom'), 750);
+    letters.forEach((l, i) => setTimeout(() => explodeLetter(l, 1.4), i * 60));
+  }
+
+  logoEl.addEventListener('click', bigBoom);
+
+  function scheduleRandomExplosion() {
+    const delay = 900 + Math.random() * 1800;
+    setTimeout(() => {
+      if (!document.hidden && letters.length) {
+        const rnd = letters[(Math.random() * letters.length) | 0];
+        explodeLetter(rnd, 0.9 + Math.random() * 0.5);
+      }
+      scheduleRandomExplosion();
+    }, delay);
+  }
+  scheduleRandomExplosion();
+
+  /* ==================== ИГРОВАЯ ЛОГИКА ==================== */
+  const PRESETS = {
+    easy:   { cols: 9,  rows: 9,  mines: 10 },
+    medium: { cols: 16, rows: 16, mines: 40 },
+    hard:   { cols: 30, rows: 16, mines: 99 }
+  };
+
+  const HARD_LIMITS = {
+    cols:  { min: 5, max: 40 },
+    rows:  { min: 5, max: 30 },
+    mines: { min: 1, max: 999 }
+  };
+
+  const MAX_MINE_RATIO = 0.35;
+  const MIN_CELL = 20;
+  const GAP      = 2;
+  const MAX_W    = 900;
+  const SAFE_ZONE = 9;
+
+  function computeLimits() {
+    const maxW = Math.min(window.innerWidth - 46, MAX_W);
+    const maxH = window.innerHeight - 340;
+
+    const maxCols = Math.floor((maxW - 8 + GAP) / (MIN_CELL + GAP));
+    const maxRows = Math.floor((maxH - 8 + GAP) / (MIN_CELL + GAP));
+
+    return {
+      cols:  { min: HARD_LIMITS.cols.min,  max: Math.max(HARD_LIMITS.cols.min,  Math.min(HARD_LIMITS.cols.max,  maxCols)) },
+      rows:  { min: HARD_LIMITS.rows.min,  max: Math.max(HARD_LIMITS.rows.min,  Math.min(HARD_LIMITS.rows.max,  maxRows)) },
+      mines: { min: HARD_LIMITS.mines.min, max: HARD_LIMITS.mines.max }
+    };
+  }
+
+  function maxMinesFor(cols, rows) {
+    const byRatio = Math.floor(cols * rows * MAX_MINE_RATIO);
+    const bySafe  = cols * rows - SAFE_ZONE;
+    return Math.max(1, Math.min(byRatio, bySafe));
+  }
+
+  let LIMITS   = computeLimits();
+  let config   = { ...PRESETS.easy };
+  let grid     = [];
+  let started  = false;
+  let gameOver = false;
+  let win      = false;
+  let flags    = 0;
+  let opened   = 0;
+  let timerId  = null;
+  let seconds  = 0;
+  let mode     = 'open';
+
+  const boardEl     = document.getElementById('board');
+  const mineEl      = document.getElementById('mineCount');
+  const faceEl      = document.getElementById('face');
+  const msgEl       = document.getElementById('msg');
+  const modeBtn     = document.getElementById('modeBtn');
+  const modeIcon    = document.getElementById('modeIcon');
+  const modeLbl     = document.getElementById('modeLabel');
+  const settingsBtn = document.getElementById('settingsBtn');
+  const timerMinEl  = document.getElementById('timerMin');
+  const timerSecEl  = document.getElementById('timerSec');
+
+  const overlay        = document.getElementById('modalOverlay');
+  const presetsEl      = document.getElementById('presets');
+  const customSection  = document.getElementById('customSection');
+  const customHeader   = document.getElementById('customHeader');
+  const colsRange      = document.getElementById('colsRange');
+  const colsInput      = document.getElementById('colsInput');
+  const colsVal        = document.getElementById('colsVal');
+  const rowsRange      = document.getElementById('rowsRange');
+  const rowsInput      = document.getElementById('rowsInput');
+  const rowsVal        = document.getElementById('rowsVal');
+  const minesRange     = document.getElementById('minesRange');
+  const minesInput     = document.getElementById('minesInput');
+  const minesVal       = document.getElementById('minesVal');
+  const mineHint       = document.getElementById('mineHint');
+  const errorMsg       = document.getElementById('errorMsg');
+  const applyBtn       = document.getElementById('applyBtn');
+  const cancelBtn      = document.getElementById('cancelBtn');
+  const mobileNote     = document.getElementById('mobileNote');
+
+  const pad  = n => String(Math.min(n, 999)).padStart(3, '0');
+  const pad2 = n => String(Math.max(0, Math.min(99, n))).padStart(2, '0');
+  const idx  = (x, y) => y * config.cols + x;
+
+  function renderTimer(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    timerMinEl.textContent = pad2(m);
+    timerSecEl.textContent = pad2(s);
+  }
+
+  function formatTime(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function neighbors(x, y) {
+    const res = [];
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        if (dx === 0 && dy === 0) continue;
+        const nx = x + dx, ny = y + dy;
+        if (nx >= 0 && nx < config.cols && ny >= 0 && ny < config.rows) {
+          res.push(grid[idx(nx, ny)]);
+        }
+      }
+    }
+    return res;
+  }
+
+  function setMode(m) {
+    mode = m;
+    if (mode === 'flag') {
+      modeBtn.classList.add('flag-mode');
+      modeIcon.textContent = '🚩';
+      modeLbl.textContent = 'Флажок';
+    } else {
+      modeBtn.classList.remove('flag-mode');
+      modeIcon.textContent = '⛏️';
+      modeLbl.textContent = 'Открыть';
+    }
+  }
+
+  function fitBoard() {
+    const maxW = Math.min(window.innerWidth - 46, MAX_W);
+    const maxH = window.innerHeight - 340;
+    const cols = config.cols, rows = config.rows;
+
+    const cellW = Math.floor((maxW - (cols - 1) * GAP - 8) / cols);
+    const cellH = Math.floor((maxH - (rows - 1) * GAP - 8) / rows);
+    const size  = Math.max(MIN_CELL, Math.min(34, cellW, cellH));
+    document.documentElement.style.setProperty('--cell', size + 'px');
+  }
+
+  function newGame() {
+    stopTimer();
+    started  = false;
+    gameOver = false;
+    win      = false;
+    flags    = 0;
+    opened   = 0;
+    seconds  = 0;
+
+    mineEl.textContent  = pad(config.mines);
+    renderTimer(0);
+    faceEl.textContent  = '🙂';
+    msgEl.textContent   = '';
+    setMode('open');
+
+    grid = [];
+    for (let y = 0; y < config.rows; y++) {
+      for (let x = 0; x < config.cols; x++) {
+        grid.push({ x, y, mine: false, open: false, flag: false, num: 0, el: null });
+      }
+    }
+
+    fitBoard();
+    renderBoard();
+  }
+
+  function renderBoard() {
+    boardEl.innerHTML = '';
+    boardEl.style.gridTemplateColumns = `repeat(${config.cols}, var(--cell))`;
+    for (const cell of grid) {
+      const d = document.createElement('div');
+      d.className = 'cell';
+      d.dataset.i = idx(cell.x, cell.y);
+      cell.el = d;
+      boardEl.appendChild(d);
+    }
+  }
+
+  function placeMines(safeX, safeY) {
+    const forbidden = new Set();
+    forbidden.add(idx(safeX, safeY));
+    for (const n of neighbors(safeX, safeY)) forbidden.add(idx(n.x, n.y));
+
+    const pool = [];
+    for (let i = 0; i < grid.length; i++) {
+      if (!forbidden.has(i)) pool.push(i);
+    }
+
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    const count = Math.min(config.mines, pool.length);
+    for (let i = 0; i < count; i++) grid[pool[i]].mine = true;
+
+    for (const cell of grid) {
+      if (cell.mine) continue;
+      cell.num = neighbors(cell.x, cell.y).filter(n => n.mine).length;
+    }
+  }
+
+  function openCell(cell) {
+    if (cell.open || cell.flag || gameOver) return;
+
+    cell.open = true;
+    opened++;
+    const el = cell.el;
+    el.classList.add('open');
+
+    if (cell.mine) {
+      el.classList.add('mine-hit');
+      el.textContent = '💥';
+      lose(cell);
+      return;
+    }
+
+    if (cell.num > 0) {
+      el.textContent = cell.num;
+      el.classList.add('n' + cell.num);
+    } else {
+      const stack = [cell];
+      while (stack.length) {
+        const cur = stack.pop();
+        for (const n of neighbors(cur.x, cur.y)) {
+          if (n.open || n.flag || n.mine) continue;
+          n.open = true;
+          opened++;
+          n.el.classList.add('open');
+          if (n.num > 0) {
+            n.el.textContent = n.num;
+            n.el.classList.add('n' + n.num);
+          } else {
+            stack.push(n);
+          }
+        }
+      }
+    }
+    checkWin();
+  }
+
+  function toggleFlag(cell) {
+    if (cell.open || gameOver) return;
+
+    if (!started) {
+      started = true;
+      placeMines(cell.x, cell.y);
+      startTimer();
+    }
+
+    cell.flag = !cell.flag;
+    cell.el.classList.toggle('flag', cell.flag);
+    cell.el.textContent = cell.flag ? '🚩' : '';
+    flags += cell.flag ? 1 : -1;
+    mineEl.textContent = pad(Math.max(0, config.mines - flags));
+  }
+
+  function chord(cell) {
+    if (!cell.open || cell.num === 0 || gameOver) return;
+    const nb = neighbors(cell.x, cell.y);
+    const flagged = nb.filter(n => n.flag).length;
+    if (flagged !== cell.num) return;
+    for (const n of nb) {
+      if (!n.flag && !n.open) {
+        openCell(n);
+        if (gameOver) return;
+      }
+    }
+  }
+
+  function checkWin() {
+    const total = config.cols * config.rows;
+    if (opened === total - config.mines) {
+      win = true;
+      gameOver = true;
+      stopTimer();
+      faceEl.textContent = '😎';
+      msgEl.textContent = `Победа! Время: ${formatTime(seconds)}`;
+      for (const cell of grid) {
+        if (cell.mine && !cell.flag) {
+          cell.el.textContent = '🚩';
+          cell.el.classList.add('flag');
+        }
+      }
+      mineEl.textContent = pad(0);
+    }
+  }
+
+  function lose(hitCell) {
+    gameOver = true;
+    stopTimer();
+    faceEl.textContent = '😵';
+    msgEl.textContent = 'Бум! Вы подорвались 💣';
+    for (const cell of grid) {
+      if (cell.mine && !cell.flag) {
+        cell.el.classList.add('open', 'mine');
+        if (cell !== hitCell) cell.el.textContent = '💣';
+      } else if (!cell.mine && cell.flag) {
+        cell.el.classList.add('wrong');
+        cell.el.textContent = '❌';
+      }
+    }
+  }
+
+  function startTimer() {
+    if (timerId) return;
+    timerId = setInterval(() => {
+      seconds++;
+      if (seconds <= 99 * 60 + 59) renderTimer(seconds);
+    }, 1000);
+  }
+  function stopTimer() {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  boardEl.addEventListener('click', e => {
+    const el = e.target.closest('.cell');
+    if (!el || gameOver) return;
+    const cell = grid[+el.dataset.i];
+
+    if (mode === 'flag') { toggleFlag(cell); return; }
+    if (cell.flag) return;
+
+    if (!started) {
+      started = true;
+      placeMines(cell.x, cell.y);
+      startTimer();
+    }
+
+    if (cell.open) chord(cell);
+    else openCell(cell);
+  });
+
+  boardEl.addEventListener('contextmenu', e => e.preventDefault());
+
+  modeBtn.addEventListener('click', () => {
+    setMode(mode === 'open' ? 'flag' : 'open');
+  });
+
+  faceEl.addEventListener('click', newGame);
+
+  /* ==================== МОДАЛЬНОЕ ОКНО ==================== */
+
+  // Определяем, соответствует ли текущий размер какому-то пресету
+  function detectPreset(cols, rows, mines) {
+    for (const [key, p] of Object.entries(PRESETS)) {
+      if (p.cols === cols && p.rows === rows && p.mines === mines) return key;
+    }
+    return null;
+  }
+
+  // Обновляет подсветку активного пресета
+  function updatePresetHighlight() {
+    const cols  = parseInt(colsInput.value, 10);
+    const rows  = parseInt(rowsInput.value, 10);
+    const mines = parseInt(minesInput.value, 10);
+    const key = detectPreset(cols, rows, mines);
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.preset === key);
+    });
+  }
+
+  // Управление раскрытием секции "Настроить под себя"
+  function setCustomOpen(open) {
+    customSection.classList.toggle('open', open);
+  }
+
+  customHeader.addEventListener('click', () => {
+    setCustomOpen(!customSection.classList.contains('open'));
+  });
+
+  function bindControl(rangeEl, inputEl, valEl, key) {
+    const sync = (value, source) => {
+      let v = parseInt(value, 10);
+      if (isNaN(v)) v = LIMITS[key].min;
+      v = Math.max(LIMITS[key].min, Math.min(LIMITS[key].max, v));
+
+      if (source !== 'range') rangeEl.value = v;
+      if (source !== 'input') inputEl.value = v;
+      valEl.textContent = v;
+
+      updateMinesLimit();
+      updatePresetHighlight();
+      validate();
+    };
+
+    rangeEl.addEventListener('input', () => sync(rangeEl.value, 'range'));
+    inputEl.addEventListener('input', () => sync(inputEl.value, 'input'));
+    inputEl.addEventListener('blur', () => {
+      const v = parseInt(inputEl.value, 10);
+      if (isNaN(v)) sync(LIMITS[key].min, 'input');
+      else sync(v, 'input');
+    });
+  }
+
+  function updateMinesLimit() {
+    const cols = parseInt(colsInput.value, 10) || LIMITS.cols.min;
+    const rows = parseInt(rowsInput.value, 10) || LIMITS.rows.min;
+    const maxMines = maxMinesFor(cols, rows);
+
+    minesRange.max = maxMines;
+    minesInput.max = maxMines;
+
+    if (parseInt(minesInput.value, 10) > maxMines) {
+      minesRange.value = maxMines;
+      minesInput.value = maxMines;
+      minesVal.textContent = maxMines;
+    }
+
+    const total = cols * rows;
+    const current = parseInt(minesInput.value, 10) || 0;
+    const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+    mineHint.textContent = `Плотность: ${pct}% (макс. ${Math.round(MAX_MINE_RATIO * 100)}%)`;
+  }
+
+  function validate() {
+    const cols  = parseInt(colsInput.value, 10);
+    const rows  = parseInt(rowsInput.value, 10);
+    const mines = parseInt(minesInput.value, 10);
+
+    let error = '';
+
+    if (isNaN(cols) || cols < LIMITS.cols.min || cols > LIMITS.cols.max) {
+      error = `Ширина: от ${LIMITS.cols.min} до ${LIMITS.cols.max}`;
+    } else if (isNaN(rows) || rows < LIMITS.rows.min || rows > LIMITS.rows.max) {
+      error = `Высота: от ${LIMITS.rows.min} до ${LIMITS.rows.max}`;
+    } else if (isNaN(mines) || mines < LIMITS.mines.min) {
+      error = 'Минимум 1 мина';
+    } else if (mines > maxMinesFor(cols, rows)) {
+      error = `Максимум ${maxMinesFor(cols, rows)} мин (${Math.round(MAX_MINE_RATIO * 100)}% от поля)`;
+    }
+
+    errorMsg.textContent = error;
+    applyBtn.disabled = !!error;
+    applyBtn.style.opacity = error ? '.5' : '1';
+    applyBtn.style.cursor = error ? 'not-allowed' : 'pointer';
+    return !error;
+  }
+
+  bindControl(colsRange, colsInput, colsVal, 'cols');
+  bindControl(rowsRange, rowsInput, rowsVal, 'rows');
+  bindControl(minesRange, minesInput, minesVal, 'mines');
+
+  // Обработчик пресетов (уровней сложности)
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = PRESETS[btn.dataset.preset];
+      const cols = Math.min(p.cols, LIMITS.cols.max);
+      const rows = Math.min(p.rows, LIMITS.rows.max);
+
+      // Обновляем поля, но без ручного апдейта highlight — он сам вызовется
+      colsInput.value = cols;
+      rowsInput.value = rows;
+      colsRange.value = cols;
+      rowsRange.value = rows;
+      colsVal.textContent = cols;
+      rowsVal.textContent = rows;
+
+      updateMinesLimit();
+      const m = Math.min(p.mines, parseInt(minesInput.max, 10));
+      minesInput.value = m;
+      minesRange.value = m;
+      minesVal.textContent = m;
+
+      updateMinesLimit();
+      updatePresetHighlight();
+      validate();
+
+      // Свёртываем секцию кастома, чтобы подчеркнуть выбор пресета
+      setCustomOpen(false);
+    });
+  });
+
+  function applyLimitsToDOM() {
+    colsRange.min = colsInput.min = LIMITS.cols.min;
+    colsRange.max = colsInput.max = LIMITS.cols.max;
+    rowsRange.min = rowsInput.min = LIMITS.rows.min;
+    rowsRange.max = rowsInput.max = LIMITS.rows.max;
+    minesRange.min = minesInput.min = LIMITS.mines.min;
+
+    const reduced = LIMITS.cols.max < HARD_LIMITS.cols.max || LIMITS.rows.max < HARD_LIMITS.rows.max;
+    if (reduced) {
+      mobileNote.textContent = `📱 Лимиты уменьшены под экран: до ${LIMITS.cols.max} × ${LIMITS.rows.max}, чтобы поле помещалось целиком.`;
+      mobileNote.classList.add('show');
+    } else {
+      mobileNote.classList.remove('show');
+    }
+  }
+
+  function openModal() {
+    LIMITS = computeLimits();
+    applyLimitsToDOM();
+
+    const cols = Math.min(config.cols, LIMITS.cols.max);
+    const rows = Math.min(config.rows, LIMITS.rows.max);
+
+    colsRange.value = colsInput.value = cols;
+    rowsRange.value = rowsInput.value = rows;
+    colsVal.textContent = cols;
+    rowsVal.textContent = rows;
+
+    updateMinesLimit();
+    const m = Math.min(config.mines, parseInt(minesInput.max, 10));
+    minesRange.value = minesInput.value = m;
+    minesVal.textContent = m;
+
+    updateMinesLimit();
+    updatePresetHighlight();
+
+    // Секцию кастома открываем только если текущие значения НЕ совпадают с пресетом
+    const isPreset = detectPreset(cols, rows, m) !== null;
+    setCustomOpen(!isPreset);
+
+    errorMsg.textContent = '';
+    validate();
+    overlay.classList.add('show');
+  }
+
+  function closeModal() {
+    overlay.classList.remove('show');
+  }
+
+  function applySettings() {
+    if (!validate()) return;
+    const cols  = parseInt(colsInput.value, 10);
+    const rows  = parseInt(rowsInput.value, 10);
+    const mines = parseInt(minesInput.value, 10);
+
+    config = { cols, rows, mines };
+    closeModal();
+    newGame();
+  }
+
+  settingsBtn.addEventListener('click', openModal);
+  cancelBtn.addEventListener('click', closeModal);
+  applyBtn.addEventListener('click', applySettings);
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('show')) closeModal();
+  });
+
+  function onViewportChange() {
+    fitBoard();
+    if (overlay.classList.contains('show')) {
+      LIMITS = computeLimits();
+      applyLimitsToDOM();
+
+      const cols = Math.min(parseInt(colsInput.value, 10) || LIMITS.cols.min, LIMITS.cols.max);
+      const rows = Math.min(parseInt(rowsInput.value, 10) || LIMITS.rows.min, LIMITS.rows.max);
+
+      colsRange.value = colsInput.value = cols;
+      rowsRange.value = rowsInput.value = rows;
+      colsVal.textContent = cols;
+      rowsVal.textContent = rows;
+
+      updateMinesLimit();
+      const m = Math.min(parseInt(minesInput.value, 10) || 1, parseInt(minesInput.max, 10));
+      minesRange.value = minesInput.value = m;
+      minesVal.textContent = m;
+
+      updateMinesLimit();
+      updatePresetHighlight();
+      validate();
+    }
+  }
+
+  window.addEventListener('resize', onViewportChange);
+  window.addEventListener('orientationchange', () => setTimeout(onViewportChange, 120));
+
+  newGame();
+})();
+</script>
+</body>
 </html>
