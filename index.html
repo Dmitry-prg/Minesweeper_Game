@@ -944,23 +944,27 @@
     const icon192 = makeIcon(192);
     const icon512 = makeIcon(512);
 
-    const manifest = {
-      name: 'Сапёр',
-      short_name: 'Сапёр',
-      description: 'Классический Сапёр с настройками поля',
-      start_url: '.',
-      scope: '.',
-      display: 'standalone',
-      orientation: 'any',
-      background_color: '#14181f',
-      theme_color: '#14181f',
-      lang: 'ru',
-      icons: [
-        { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
-        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
-        { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
-      ]
-    };
+    const baseUrl = location.href.substring(0, location.href.lastIndexOf('/') + 1);
+	const pageUrl = location.href.split('?')[0].split('#')[0];
+
+	const manifest = {
+		name: 'Сапёр',
+		short_name: 'Сапёр',
+		description: 'Классический Сапёр с настройками поля',
+		start_url: pageUrl,     // абсолютный URL страницы
+		scope: baseUrl,         // абсолютный URL папки
+		id: pageUrl,            // важно для Chrome — стабильный ID приложения
+		display: 'standalone',
+		orientation: 'any',
+		background_color: '#14181f',
+		theme_color: '#14181f',
+		lang: 'ru',
+		icons: [
+			{ src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+			{ src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+			{ src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+		]
+	};
 
     const manifestUrl = 'data:application/manifest+json;charset=utf-8,' +
       encodeURIComponent(JSON.stringify(manifest));
