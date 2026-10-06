@@ -9,6 +9,13 @@
 <meta name="apple-mobile-web-app-title" content="Сапёр">
 <meta name="description" content="Классический Сапёр с настройками поля, флажками и таймером">
 <title>Сапёр</title>
+
+<!-- Web App Manifest (отдельный файл) -->
+<link rel="manifest" href="manifest.webmanifest">
+
+<!-- Иконка во вкладке браузера (SVG data URL) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20192%20192'%3E%3Cdefs%3E%3CradialGradient%20id='bg'%20cx='.5'%20cy='0'%20r='1.2'%3E%3Cstop%20offset='0'%20stop-color='%232b3a55'/%3E%3Cstop%20offset='.7'%20stop-color='%2314181f'/%3E%3C/radialGradient%3E%3CradialGradient%20id='b'%20cx='.35'%20cy='.35'%20r='.75'%3E%3Cstop%20offset='0'%20stop-color='%235a6a82'/%3E%3Cstop%20offset='.6'%20stop-color='%232a3446'/%3E%3Cstop%20offset='1'%20stop-color='%230f151d'/%3E%3C/radialGradient%3E%3CradialGradient%20id='g'%20cx='.5'%20cy='.5'%20r='.5'%3E%3Cstop%20offset='0'%20stop-color='%23ffd166'%20stop-opacity='.9'/%3E%3Cstop%20offset='1'%20stop-color='%23ffd166'%20stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width='192'%20height='192'%20rx='28'%20fill='url(%23bg)'/%3E%3Cg%20transform='translate(56,66)'%3E%3Ccircle%20cx='40'%20cy='40'%20r='30'%20fill='url(%23b)'%20stroke='%233c5170'%20stroke-width='2'/%3E%3Cellipse%20cx='30'%20cy='30'%20rx='10'%20ry='6'%20fill='white'%20opacity='.22'%20transform='rotate(-25%2030%2030)'/%3E%3Cpath%20d='M66%2020Q76%200%2088-10'%20stroke='%238b6f4e'%20stroke-width='5'%20fill='none'%20stroke-linecap='round'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='16'%20fill='url(%23g)'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='5'%20fill='%23ffd166'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='2'%20fill='%23fffef0'/%3E%3C/g%3E%3C/svg%3E">
+
 <style>
   * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
@@ -73,11 +80,7 @@
     min-width: 0;
   }
 
-  .header-actions {
-    display: flex;
-    gap: 6px;
-    flex-shrink: 0;
-  }
+  .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
   .icon-btn {
     width: clamp(38px, 10.5vw, 44px);
@@ -119,7 +122,6 @@
     0%, 100% { transform: translateY(0) rotate(-4deg); }
     50%      { transform: translateY(-5px) rotate(4deg); }
   }
-
   .logo.boom { animation: logoBoom .7s cubic-bezier(.36,.07,.19,.97); }
   @keyframes logoBoom {
     0%   { transform: scale(1) rotate(0deg); filter: none; }
@@ -128,13 +130,8 @@
     70%  { transform: scale(1.08) rotate(-4deg); filter: drop-shadow(0 0 14px #ffb347); }
     100% { transform: scale(1) rotate(0deg); filter: none; }
   }
-
   .logo-glow { animation: glowPulse 1.4s ease-in-out infinite; }
-  @keyframes glowPulse {
-    0%, 100% { opacity: .35; }
-    50%      { opacity: .85; }
-  }
-
+  @keyframes glowPulse { 0%, 100% { opacity: .35; } 50% { opacity: .85; } }
   .spark { animation: sparkFlicker .35s steps(2) infinite; transform-origin: 66px 8px; }
   @keyframes sparkFlicker {
     0%   { opacity: 1; transform: scale(1); }
@@ -164,14 +161,10 @@
     color: inherit;
     text-shadow: inherit;
   }
-
-  .title-letter.exploding {
-    animation: letterBoom .85s cubic-bezier(.36,.07,.19,.97);
-  }
-
+  .title-letter.exploding { animation: letterBoom .85s cubic-bezier(.36,.07,.19,.97); }
   @keyframes letterBoom {
     0%   { transform: scale(1) rotate(0deg) translateY(0); color: #9db8e8; text-shadow: 0 2px 10px rgba(80,130,220,.4); }
-    12%  { transform: scale(1.08) rotate(0deg) translateY(0); color: #ffffff; text-shadow: 0 0 22px #ffffff; }
+    12%  { transform: scale(1.08) rotate(0deg) translateY(0); color: #fff; text-shadow: 0 0 22px #fff; }
     24%  { transform: scale(1.6) rotate(-14deg) translateY(-7px); color: #ff5b5b; text-shadow: 0 0 26px #ff5b5b, 0 0 52px #ff5b5b; }
     38%  { transform: scale(1.3) rotate(12deg) translateY(-2px); color: #ffd166; text-shadow: 0 0 30px #ffd166, 0 0 62px #ffd166; }
     52%  { transform: scale(1.55) rotate(-9deg) translateY(-5px); color: #ffb347; text-shadow: 0 0 32px #ffb347; }
@@ -240,14 +233,8 @@
     min-width: 78px;
     font-variant-numeric: tabular-nums;
   }
-  .counter.time .sep {
-    animation: sepPulse 1s ease-in-out infinite;
-    display: inline-block;
-  }
-  @keyframes sepPulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: .35; }
-  }
+  .counter.time .sep { animation: sepPulse 1s ease-in-out infinite; display: inline-block; }
+  @keyframes sepPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 
   .face {
     width: clamp(38px, 11vw, 46px);
@@ -337,7 +324,6 @@
     touch-action: manipulation;
   }
   .cell:active:not(.open) { transform: scale(.9); }
-
   .cell.open { background: #1c2532; border-color: #232f40; cursor: default; }
   .cell.flag { color: #ff6b6b; }
   .cell.mine { background: #7d2020 !important; }
@@ -406,7 +392,6 @@
     text-transform: uppercase;
   }
 
-  /* Кнопка установки PWA */
   .install-btn {
     width: 100%;
     display: flex;
@@ -448,7 +433,6 @@
     text-align: center;
   }
 
-  /* ---------- Пресеты (уровни сложности) ---------- */
   .presets {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -486,21 +470,9 @@
   }
   .preset-btn.active .preset-name { color: #fff; }
   .preset-btn.active .preset-info { color: #bcd4ff; }
+  .preset-name { font-size: 13.5px; font-weight: 700; letter-spacing: .3px; color: #e0ecff; }
+  .preset-info { font-size: 10.5px; font-family: "Consolas", monospace; color: #7f97bd; letter-spacing: .2px; }
 
-  .preset-name {
-    font-size: 13.5px;
-    font-weight: 700;
-    letter-spacing: .3px;
-    color: #e0ecff;
-  }
-  .preset-info {
-    font-size: 10.5px;
-    font-family: "Consolas", monospace;
-    color: #7f97bd;
-    letter-spacing: .2px;
-  }
-
-  /* ---------- Выпадающая секция "Настроить под себя" ---------- */
   .custom-section {
     margin-bottom: 8px;
     border: 1px solid #3c5170;
@@ -530,7 +502,6 @@
   }
   .custom-header:hover { background: rgba(90,140,230,.08); }
   .custom-header:active { background: rgba(90,140,230,.14); }
-
   .custom-header .arrow {
     display: inline-block;
     font-size: 12px;
@@ -659,7 +630,6 @@
     font-size: 12px;
     text-align: center;
     margin-top: 8px;
-    margin-bottom: 0;
     min-height: 14px;
   }
 
@@ -685,7 +655,6 @@
     letter-spacing: .3px;
   }
 
-  /* ==================== ТОСТ ==================== */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -706,15 +675,11 @@
     max-width: 90vw;
     text-align: center;
   }
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- ==================== ШАПКА ==================== -->
 <header class="game-header">
   <div class="header-inner">
     <div class="header-brand">
@@ -757,7 +722,6 @@
   </div>
 </header>
 
-<!-- ==================== КОНТЕНТ ==================== -->
 <main>
   <div class="panel">
     <div class="hud">
@@ -780,19 +744,16 @@
   </div>
 </main>
 
-<!-- ---------- Модальное окно настроек ---------- -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <h2 id="modalTitle">Настройки поля</h2>
 
-    <!-- Кнопка установки PWA -->
     <button class="install-btn" id="installBtn" style="display:none">
       <span class="icon">📲</span>
       <span id="installBtnLabel">Установить приложение</span>
     </button>
     <div class="install-hint" id="installHint" style="display:none"></div>
 
-    <!-- Пресеты уровней сложности -->
     <div class="presets" id="presets">
       <button class="preset-btn" data-preset="easy">
         <span class="preset-name">Лёгкий</span>
@@ -810,7 +771,6 @@
 
     <div class="mobile-note" id="mobileNote"></div>
 
-    <!-- Выпадающая секция "Настроить под себя" -->
     <div class="custom-section" id="customSection">
       <button class="custom-header" id="customHeader" type="button">
         <span>🎛️ Настроить под себя</span>
@@ -824,7 +784,6 @@
             <input type="number" class="num-input" id="colsInput" min="5" max="40" value="9">
           </div>
         </div>
-
         <div class="field">
           <label>Высота <span class="val" id="rowsVal">9</span></label>
           <div class="slider-row">
@@ -832,7 +791,6 @@
             <input type="number" class="num-input" id="rowsInput" min="5" max="30" value="9">
           </div>
         </div>
-
         <div class="field">
           <label>Мины <span class="val" id="minesVal">10</span></label>
           <div class="slider-row">
@@ -869,132 +827,24 @@
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
   }
 
-  /* ==================== PWA ==================== */
-  (function setupPWA() {
-    function makeIcon(size) {
-      const c = document.createElement('canvas');
-      c.width = c.height = size;
-      const ctx = c.getContext('2d');
-      const s = size / 100;
-
-      const bg = ctx.createLinearGradient(0, 0, 0, size);
-      bg.addColorStop(0, '#2b3a55');
-      bg.addColorStop(1, '#14181f');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, size, size);
-
-      const glow = ctx.createRadialGradient(size * 0.5, size * 0.58, 0, size * 0.5, size * 0.58, size * 0.5);
-      glow.addColorStop(0, 'rgba(255,179,71,0.4)');
-      glow.addColorStop(1, 'rgba(255,179,71,0)');
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, size, size);
-
-      const cx = size * 0.45, cy = size * 0.6, r = size * 0.26;
-      const bgrad = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.35, r * 0.1, cx, cy, r);
-      bgrad.addColorStop(0, '#5a6a82');
-      bgrad.addColorStop(0.6, '#2a3446');
-      bgrad.addColorStop(1, '#0f151d');
-      ctx.fillStyle = bgrad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = '#3c5170';
-      ctx.lineWidth = size * 0.015;
-      ctx.stroke();
-
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.beginPath();
-      ctx.ellipse(cx - r * 0.35, cy - r * 0.4, r * 0.32, r * 0.2, -0.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = 'rgba(255,255,255,0.4)';
-      ctx.beginPath();
-      ctx.ellipse(cx - r * 0.3, cy - r * 0.45, r * 0.15, r * 0.09, -0.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = '#b59468';
-      ctx.lineWidth = size * 0.04;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(cx + r * 0.85, cy - r * 0.55);
-      ctx.quadraticCurveTo(cx + r * 1.3, cy - r * 1.3, cx + r * 1.7, cy - r * 1.7);
-      ctx.stroke();
-
-      const sx = cx + r * 1.7, sy = cy - r * 1.7;
-      const sglow = ctx.createRadialGradient(sx, sy, 0, sx, sy, size * 0.15);
-      sglow.addColorStop(0, 'rgba(255,209,102,0.95)');
-      sglow.addColorStop(1, 'rgba(255,209,102,0)');
-      ctx.fillStyle = sglow;
-      ctx.fillRect(sx - size * 0.15, sy - size * 0.15, size * 0.3, size * 0.3);
-
-      ctx.fillStyle = '#ffd166';
-      ctx.beginPath();
-      ctx.arc(sx, sy, size * 0.045, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#fffef0';
-      ctx.beginPath();
-      ctx.arc(sx, sy, size * 0.02, 0, Math.PI * 2);
-      ctx.fill();
-
-      return c.toDataURL('image/png');
-    }
-
-    const icon192 = makeIcon(192);
-    const icon512 = makeIcon(512);
-
-    const baseUrl = location.href.substring(0, location.href.lastIndexOf('/') + 1);
-	const pageUrl = location.href.split('?')[0].split('#')[0];
-
-	const manifest = {
-		name: 'Сапёр',
-		short_name: 'Сапёр',
-		description: 'Классический Сапёр с настройками поля',
-		start_url: pageUrl,     // абсолютный URL страницы
-		scope: baseUrl,         // абсолютный URL папки
-		id: pageUrl,            // важно для Chrome — стабильный ID приложения
-		display: 'standalone',
-		orientation: 'any',
-		background_color: '#14181f',
-		theme_color: '#14181f',
-		lang: 'ru',
-		icons: [
-			{ src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any' },
-			{ src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' },
-			{ src: icon512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
-		]
-	};
-
-    const manifestUrl = 'data:application/manifest+json;charset=utf-8,' +
-      encodeURIComponent(JSON.stringify(manifest));
-
-    const link = document.createElement('link');
-    link.rel = 'manifest';
-    link.href = manifestUrl;
-    document.head.appendChild(link);
-
-    const apple = document.createElement('link');
-    apple.rel = 'apple-touch-icon';
-    apple.href = makeIcon(180);
-    document.head.appendChild(apple);
-
-    const favicon = document.createElement('link');
-    favicon.rel = 'icon';
-    favicon.type = 'image/png';
-    favicon.href = makeIcon(64);
-    document.head.appendChild(favicon);
-
-    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
-      });
-    }
-  })();
+  /* ==================== РЕГИСТРАЦИЯ SW ==================== */
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).then(reg => {
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              nw.postMessage('SKIP_WAITING');
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+  }
 
   /* ==================== УСТАНОВКА PWA ==================== */
   const installBtn    = document.getElementById('installBtn');
-  const installBtnLbl = document.getElementById('installBtnLabel');
   const installHint   = document.getElementById('installHint');
 
   let deferredPrompt = null;
@@ -1207,7 +1057,6 @@
   const timerSecEl  = document.getElementById('timerSec');
 
   const overlay        = document.getElementById('modalOverlay');
-  const presetsEl      = document.getElementById('presets');
   const customSection  = document.getElementById('customSection');
   const customHeader   = document.getElementById('customHeader');
   const colsRange      = document.getElementById('colsRange');
@@ -1484,7 +1333,6 @@
 
   /* ==================== МОДАЛЬНОЕ ОКНО ==================== */
 
-  // Определяем, соответствует ли текущий размер какому-то пресету
   function detectPreset(cols, rows, mines) {
     for (const [key, p] of Object.entries(PRESETS)) {
       if (p.cols === cols && p.rows === rows && p.mines === mines) return key;
@@ -1492,7 +1340,6 @@
     return null;
   }
 
-  // Обновляет подсветку активного пресета
   function updatePresetHighlight() {
     const cols  = parseInt(colsInput.value, 10);
     const rows  = parseInt(rowsInput.value, 10);
@@ -1504,7 +1351,6 @@
     });
   }
 
-  // Управление раскрытием секции "Настроить под себя"
   function setCustomOpen(open) {
     customSection.classList.toggle('open', open);
   }
@@ -1585,14 +1431,12 @@
   bindControl(rowsRange, rowsInput, rowsVal, 'rows');
   bindControl(minesRange, minesInput, minesVal, 'mines');
 
-  // Обработчик пресетов (уровней сложности)
   document.querySelectorAll('.preset-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const p = PRESETS[btn.dataset.preset];
       const cols = Math.min(p.cols, LIMITS.cols.max);
       const rows = Math.min(p.rows, LIMITS.rows.max);
 
-      // Обновляем поля, но без ручного апдейта highlight — он сам вызовется
       colsInput.value = cols;
       rowsInput.value = rows;
       colsRange.value = cols;
@@ -1609,8 +1453,6 @@
       updateMinesLimit();
       updatePresetHighlight();
       validate();
-
-      // Свёртываем секцию кастома, чтобы подчеркнуть выбор пресета
       setCustomOpen(false);
     });
   });
@@ -1624,7 +1466,7 @@
 
     const reduced = LIMITS.cols.max < HARD_LIMITS.cols.max || LIMITS.rows.max < HARD_LIMITS.rows.max;
     if (reduced) {
-      mobileNote.textContent = `📱 Лимиты уменьшены под экран: до ${LIMITS.cols.max} × ${LIMITS.rows.max}, чтобы поле помещалось целиком.`;
+      mobileNote.textContent = `📱 Лимиты уменьшены под экран: до ${LIMITS.cols.max} × ${LIMITS.rows.max}.`;
       mobileNote.classList.add('show');
     } else {
       mobileNote.classList.remove('show');
@@ -1651,7 +1493,6 @@
     updateMinesLimit();
     updatePresetHighlight();
 
-    // Секцию кастома открываем только если текущие значения НЕ совпадают с пресетом
     const isPreset = detectPreset(cols, rows, m) !== null;
     setCustomOpen(!isPreset);
 

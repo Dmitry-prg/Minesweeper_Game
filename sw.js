@@ -1,13 +1,13 @@
 /* Service Worker для игры «Сапёр» */
 
-const CACHE_NAME = 'saper-cache-v1';
+const CACHE_NAME = 'saper-cache-v3';
 const ASSETS = [
   './',
   './index.html',
-  './manifest.json'  // опционально, если создадите отдельный манифест
+  './manifest.webmanifest',
+  './sw.js'
 ];
 
-// Установка: кэшируем основные ресурсы
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -16,7 +16,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// Активация: чистим старые кэши
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
@@ -27,21 +26,16 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Перехват запросов: cache-first с обновлением
 self.addEventListener('fetch', event => {
   const req = event.request;
-
-  // Пропускаем всё, кроме GET
   if (req.method !== 'GET') return;
 
-  // Пропускаем запросы к другим origin
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
 
   event.respondWith(
     caches.match(req).then(cached => {
       const network = fetch(req).then(res => {
-        // Кэшируем только валидные ответы
         if (res && res.status === 200 && res.type === 'basic') {
           const clone = res.clone();
           caches.open(CACHE_NAME).then(c => c.put(req, clone));
@@ -52,4 +46,8 @@ self.addEventListener('fetch', event => {
       return cached || network;
     })
   );
+});
+
+self.addEventListener('message', e => {
+  if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });
