@@ -1,3 +1,3 @@
 # Minesweeper_Game
-## A good old game
+Старая добрая игра 'Сапёр'
 ### [Играть](https://dmitry-prg.github.io/Minesweeper_Game/)
