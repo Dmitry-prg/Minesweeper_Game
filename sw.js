@@ -1,11 +1,12 @@
 /* Service Worker для игры «Сапёр» */
 
-const CACHE_NAME = 'saper-cache-v3';
+const CACHE_NAME = 'saper-cache-v4';
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './sw.js'
+  './sw.js',
+  './icon.png'
 ];
 
 self.addEventListener('install', event => {

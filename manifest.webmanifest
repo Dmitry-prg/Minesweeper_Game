@@ -14,21 +14,21 @@
   "categories": ["games", "entertainment"],
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20192%20192'%3E%3Cdefs%3E%3CradialGradient%20id='bg'%20cx='.5'%20cy='0'%20r='1.2'%3E%3Cstop%20offset='0'%20stop-color='%232b3a55'/%3E%3Cstop%20offset='.7'%20stop-color='%2314181f'/%3E%3C/radialGradient%3E%3CradialGradient%20id='b'%20cx='.35'%20cy='.35'%20r='.75'%3E%3Cstop%20offset='0'%20stop-color='%235a6a82'/%3E%3Cstop%20offset='.6'%20stop-color='%232a3446'/%3E%3Cstop%20offset='1'%20stop-color='%230f151d'/%3E%3C/radialGradient%3E%3CradialGradient%20id='g'%20cx='.5'%20cy='.5'%20r='.5'%3E%3Cstop%20offset='0'%20stop-color='%23ffd166'%20stop-opacity='.9'/%3E%3Cstop%20offset='1'%20stop-color='%23ffd166'%20stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width='192'%20height='192'%20rx='28'%20fill='url(%23bg)'/%3E%3Cg%20transform='translate(56,66)'%3E%3Ccircle%20cx='40'%20cy='40'%20r='30'%20fill='url(%23b)'%20stroke='%233c5170'%20stroke-width='2'/%3E%3Cellipse%20cx='30'%20cy='30'%20rx='10'%20ry='6'%20fill='white'%20opacity='.22'%20transform='rotate(-25%2030%2030)'/%3E%3Cpath%20d='M66%2020Q76%200%2088-10'%20stroke='%238b6f4e'%20stroke-width='5'%20fill='none'%20stroke-linecap='round'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='16'%20fill='url(%23g)'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='5'%20fill='%23ffd166'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='2'%20fill='%23fffef0'/%3E%3C/g%3E%3C/svg%3E",
+      "src": "./icon.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20192%20192'%3E%3Cdefs%3E%3CradialGradient%20id='bg'%20cx='.5'%20cy='0'%20r='1.2'%3E%3Cstop%20offset='0'%20stop-color='%232b3a55'/%3E%3Cstop%20offset='.7'%20stop-color='%2314181f'/%3E%3C/radialGradient%3E%3CradialGradient%20id='b'%20cx='.35'%20cy='.35'%20r='.75'%3E%3Cstop%20offset='0'%20stop-color='%235a6a82'/%3E%3Cstop%20offset='.6'%20stop-color='%232a3446'/%3E%3Cstop%20offset='1'%20stop-color='%230f151d'/%3E%3C/radialGradient%3E%3CradialGradient%20id='g'%20cx='.5'%20cy='.5'%20r='.5'%3E%3Cstop%20offset='0'%20stop-color='%23ffd166'%20stop-opacity='.9'/%3E%3Cstop%20offset='1'%20stop-color='%23ffd166'%20stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width='192'%20height='192'%20rx='28'%20fill='url(%23bg)'/%3E%3Cg%20transform='translate(56,66)'%3E%3Ccircle%20cx='40'%20cy='40'%20r='30'%20fill='url(%23b)'%20stroke='%233c5170'%20stroke-width='2'/%3E%3Cellipse%20cx='30'%20cy='30'%20rx='10'%20ry='6'%20fill='white'%20opacity='.22'%20transform='rotate(-25%2030%2030)'/%3E%3Cpath%20d='M66%2020Q76%200%2088-10'%20stroke='%238b6f4e'%20stroke-width='5'%20fill='none'%20stroke-linecap='round'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='16'%20fill='url(%23g)'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='5'%20fill='%23ffd166'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='2'%20fill='%23fffef0'/%3E%3C/g%3E%3C/svg%3E",
+      "src": "./icon.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20192%20192'%3E%3Cdefs%3E%3CradialGradient%20id='bg'%20cx='.5'%20cy='0'%20r='1.2'%3E%3Cstop%20offset='0'%20stop-color='%232b3a55'/%3E%3Cstop%20offset='.7'%20stop-color='%2314181f'/%3E%3C/radialGradient%3E%3CradialGradient%20id='b'%20cx='.35'%20cy='.35'%20r='.75'%3E%3Cstop%20offset='0'%20stop-color='%235a6a82'/%3E%3Cstop%20offset='.6'%20stop-color='%232a3446'/%3E%3Cstop%20offset='1'%20stop-color='%230f151d'/%3E%3C/radialGradient%3E%3CradialGradient%20id='g'%20cx='.5'%20cy='.5'%20r='.5'%3E%3Cstop%20offset='0'%20stop-color='%23ffd166'%20stop-opacity='.9'/%3E%3Cstop%20offset='1'%20stop-color='%23ffd166'%20stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width='192'%20height='192'%20rx='28'%20fill='url(%23bg)'/%3E%3Cg%20transform='translate(56,66)'%3E%3Ccircle%20cx='40'%20cy='40'%20r='30'%20fill='url(%23b)'%20stroke='%233c5170'%20stroke-width='2'/%3E%3Cellipse%20cx='30'%20cy='30'%20rx='10'%20ry='6'%20fill='white'%20opacity='.22'%20transform='rotate(-25%2030%2030)'/%3E%3Cpath%20d='M66%2020Q76%200%2088-10'%20stroke='%238b6f4e'%20stroke-width='5'%20fill='none'%20stroke-linecap='round'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='16'%20fill='url(%23g)'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='5'%20fill='%23ffd166'/%3E%3Ccircle%20cx='88'%20cy='-10'%20r='2'%20fill='%23fffef0'/%3E%3C/g%3E%3C/svg%3E",
+      "src": "./icon.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]
